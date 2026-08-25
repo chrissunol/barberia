@@ -20,5 +20,9 @@ class Settings(BaseSettings):
     def trusted_proxy_cidr_list(self) -> list[str]:
         return [cidr.strip() for cidr in self.trusted_proxy_cidrs.split(",") if cidr.strip()]
 
+    @property
+    def frontend_origin_list(self) -> list[str]:
+        return [origin.strip().rstrip("/") for origin in self.frontend_origin.split(",") if origin.strip()]
+
 
 settings = Settings()
