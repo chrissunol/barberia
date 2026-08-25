@@ -1,0 +1,7 @@
+Back-end/.env
+Back-end/.venv/
+Back-end/**/__pycache__/
+Front-end/node_modules/
+Front-end/dist/
+Front-end/.angular/
+*.pyc

@@ -1,0 +1,154 @@
+:host { display: block; min-height: 100vh; }
+
+.checkin-page {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 18px;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),
+    #0c0c0d;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f5f5f5;
+}
+
+.checkin-card {
+  position: relative;
+  width: min(100%, 1080px);
+  display: grid;
+  grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: clamp(40px, 8vw, 112px);
+  padding: clamp(28px, 5vw, 48px);
+  border: 1px solid #29292d;
+  border-radius: 28px;
+  background: rgba(20, 20, 22, .96);
+  box-shadow: 0 30px 80px rgba(0,0,0,.35);
+}
+
+.language-picker {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaaab2;
+  font-size: 12px;
+}
+
+.language-picker select {
+  padding: 7px 8px;
+  border: 1px solid #333338;
+  border-radius: 8px;
+  background: #18181b;
+  color: #f5f5f5;
+}
+
+.brand-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transform: translateY(20px);
+}
+
+.brand-mark {
+  width: min(100%, 360px);
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  animation: logo-arrival .8s ease-out both, logo-float 5s ease-in-out 1s infinite;
+  transform-origin: center;
+}
+
+@keyframes logo-arrival {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark img {
+    animation: none;
+  }
+}
+
+.form-panel { min-width: 0; }
+.intro { text-align: left; }
+.eyebrow { margin: 0 0 .5em; font-size: .78em; letter-spacing: .22em; color: #a9a9b1; }
+h1 { margin: 0; font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1; }
+.subtitle { margin: 1em 0 2em; color: #aaaab2; line-height: 1.6; font-size: 1em; }
+form { display: grid; gap: 20px; }
+.name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+label { display: grid; gap: 8px; }
+label > span { font-size: 14px; font-weight: 700; }
+input, select {
+  width: 100%; box-sizing: border-box; padding: 16px 17px;
+  border: 1px solid #333338; border-radius: 14px; outline: none;
+  background: #18181b; color: white; font-size: 16px;
+  transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus { border-color: #f2f2f2; box-shadow: 0 0 0 3px rgba(255,255,255,.08); }
+small { color: #ff8a8a; }
+button {
+  margin-top: 8px; padding: 1.15em 1.5em; min-height: 56px; border: 0; border-radius: 14px;
+  background: #f2f2f2; color: #111; font-weight: 900; letter-spacing: .06em;
+  font-size: 15px; cursor: pointer;
+}
+button:disabled { opacity: .55; cursor: not-allowed; }
+.message { padding: 14px 16px; border-radius: 12px; font-size: 14px; }
+.success {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 10;
+  width: min(calc(100% - 36px), 620px);
+  box-sizing: border-box;
+  transform: translateX(-50%);
+  background: rgba(52, 211, 153, .12);
+  color: #83f2c2;
+  border: 1px solid rgba(131, 242, 194, .24);
+  text-align: center;
+}
+.error { background: rgba(248, 113, 113, .12); color: #ffaaaa; }
+
+@media (max-width: 560px) {
+  .name-grid { grid-template-columns: 1fr; }
+  .checkin-page { padding: 20px 12px; }
+  .checkin-card { border-radius: 22px; padding: 92px 22px 28px; }
+  .language-picker { top: 20px; left: 22px; }
+  .brand-panel { padding-top: 24px; }
+}
+
+@media (max-width: 1023px) {
+  .checkin-card {
+    grid-template-columns: 1fr;
+    gap: 2.5vh;
+    padding: clamp(28px, 6vw, 52px);
+  }
+
+  .brand-panel { justify-content: center; }
+  .brand-panel { align-items: center; }
+  .intro { text-align: center; }
+}
+
+@media (min-width: 561px) and (max-width: 900px) {
+  .checkin-page { padding: 28px 24px; }
+}
