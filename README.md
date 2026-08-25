@@ -40,7 +40,7 @@ Configura estas variables en Render:
 ```env
 SUPABASE_URL=https://tu-proyecto.supabase.co
 SUPABASE_KEY=tu-clave-privada-del-servidor
-FRONTEND_ORIGIN=https://tu-proyecto.pages.dev
+FRONTEND_ORIGIN=https://alibabacheckin.csunol73.workers.dev
 ALLOWED_CLIENT_IPS=IP_PUBLICA_DE_LA_BARBERIA
 TRUSTED_PROXY_CIDRS=RANGOS_IPV4_E_IPV6_DE_CLOUDFLARE
 RATE_LIMIT=5/minute
@@ -51,6 +51,11 @@ RATE_LIMIT_STORAGE_URI=redis://usuario:password@host:6379/0
 una dirección local como `192.168.x.x`. `TRUSTED_PROXY_CIDRS` debe contener
 únicamente los rangos oficiales de Cloudflare que uses delante de Render.
 Mientras `ALLOWED_CLIENT_IPS` esté vacío, la API rechaza el tráfico.
+
+El valor de `FRONTEND_ORIGIN` debe coincidir exactamente con el origen del
+frontend, sin una barra final. Si hay varios frontends, sepáralos con comas.
+Después de cambiar esta variable en Render, redeploya el servicio para que
+FastAPI responda correctamente a las peticiones preflight `OPTIONS`.
 
 Arranca FastAPI:
 ```bash
