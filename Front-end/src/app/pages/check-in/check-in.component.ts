@@ -16,12 +16,14 @@ export class CheckInComponent implements OnDestroy {
   loading = false;
   successMessage = '';
   errorMessage = '';
+  logoTapped = false;
   private successTimeout?: ReturnType<typeof setTimeout>;
+  private logoTimeout?: ReturnType<typeof setTimeout>;
 
   readonly translations = {
     es: {
       language: 'Idioma', barberShop: 'BARBERIA', welcome: 'Bienvenido',
-      subtitle: 'Regístrate por favor. Solo tomará unos segundos.', firstName: 'Nombre',
+      subtitle: 'Regístrate por favor. Solo tomará unos segundos.', logoAction: 'Activar animación del logo', firstName: 'Nombre',
       lastName: 'Apellido', phone: 'Número de teléfono', email: 'Correo electrónico',
       howHeard: '¿Cómo te enteraste de nosotros?', howHeardPlaceholder: 'Selecciona una opción',
       heardOptions: [
@@ -33,12 +35,14 @@ export class CheckInComponent implements OnDestroy {
       emailPlaceholder: 'example@gmail.com', firstNameError: 'Ingresa tu nombre.',
       lastNameError: 'Ingresa tu apellido.', phoneError: 'Ingresa un número de teléfono válido.',
       emailError: 'Ingresa un correo electrónico válido.', checkingIn: 'REGISTRANDO...',
+      privacyNotice: 'Tus datos se usarán para gestionar este registro y tu historial de visitas.',
+      privacyConsent: 'Acepto el uso de mis datos para estas finalidades.', privacyError: 'Debes aceptar antes de continuar.',
       checkIn: 'REGISTRAR ENTRADA', success: (name: string) => `Registro completado. ¡Bienvenido, ${name}!`,
       requestError: 'No se pudo completar el registro. Inténtalo de nuevo.'
     },
     en: {
       language: 'Language', barberShop: 'BARBER SHOP', welcome: 'Welcome',
-      subtitle: 'Please register. It will only take a few seconds.', firstName: 'First name',
+      subtitle: 'Please register. It will only take a few seconds.', logoAction: 'Activate logo animation', firstName: 'First name',
       lastName: 'Last name', phone: 'Phone number', email: 'Email',
       howHeard: 'How did you hear about us?', howHeardPlaceholder: 'Select an option',
       heardOptions: [
@@ -50,6 +54,8 @@ export class CheckInComponent implements OnDestroy {
       emailPlaceholder: 'example@gmail.com', firstNameError: 'Please enter your first name.',
       lastNameError: 'Please enter your last name.', phoneError: 'Please enter a valid phone number.',
       emailError: 'Please enter a valid email address.', checkingIn: 'CHECKING IN...',
+      privacyNotice: 'Your information will be used to manage this check-in and your visit history.',
+      privacyConsent: 'I agree to the use of my information for these purposes.', privacyError: 'You must agree before continuing.',
       checkIn: 'CHECK IN', success: (name: string) => `Check-in complete. Welcome, ${name}!`,
       requestError: 'Unable to complete check-in. Please try again.'
     }
@@ -57,6 +63,11 @@ export class CheckInComponent implements OnDestroy {
 
   get text() {
     return this.translations[this.language];
+  }
+
+  setLanguage(language: 'es' | 'en'): void {
+    this.language = language;
+    document.documentElement.lang = language;
   }
 
   formatPhone(event: Event): void {
@@ -75,12 +86,28 @@ export class CheckInComponent implements OnDestroy {
     this.form.controls.phone.setValue(formatted, { emitEvent: false });
   }
 
+  onLogoTap(): void {
+    this.logoTapped = false;
+    if (this.logoTimeout) {
+      clearTimeout(this.logoTimeout);
+    }
+
+    requestAnimationFrame(() => {
+      this.logoTapped = true;
+      this.logoTimeout = setTimeout(() => {
+        this.logoTapped = false;
+        this.logoTimeout = undefined;
+      }, 700);
+    });
+  }
+
   readonly form = this.fb.nonNullable.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]],
-    howHeard: ['', Validators.required]
+    howHeard: ['', Validators.required],
+    privacyConsent: [false, Validators.requiredTrue]
   });
 
   constructor(
@@ -130,6 +157,9 @@ export class CheckInComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.successTimeout) {
       clearTimeout(this.successTimeout);
+    }
+    if (this.logoTimeout) {
+      clearTimeout(this.logoTimeout);
     }
   }
 }

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { CheckInComponent } from './pages/check-in/check-in.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CheckInComponent],
-  template: '<app-check-in />'
+  imports: [RouterOutlet],
+  template: '<router-outlet />'
 })
 export class AppComponent {}

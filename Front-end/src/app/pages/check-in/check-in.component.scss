@@ -54,18 +54,58 @@
 }
 
 .brand-mark {
+  position: relative;
+  display: block;
   width: min(100%, 360px);
   margin-top: 0;
   margin-bottom: 18px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: normal;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.brand-mark:focus-visible {
+  outline: 2px solid #f2f2f2;
+  outline-offset: 8px;
+}
+
+.brand-mark::after {
+  position: absolute;
+  inset: 12%;
+  z-index: 0;
+  border: 2px solid rgba(242, 242, 242, .65);
+  border-radius: 50%;
+  content: '';
+  opacity: 0;
+  transform: scale(.72);
+  pointer-events: none;
 }
 
 .brand-mark img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
   object-fit: contain;
-  animation: logo-arrival .8s ease-out both, logo-float 5s ease-in-out 1s infinite;
+  animation: logo-arrival .8s ease-out both, logo-float 4.5s ease-in-out 1s infinite;
   transform-origin: center;
+  will-change: transform;
+}
+
+.brand-mark.logo-tapped img {
+  animation: logo-impact .7s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.brand-mark.logo-tapped::after {
+  animation: logo-ring .7s ease-out both;
 }
 
 @keyframes logo-arrival {
@@ -81,11 +121,23 @@
 
 @keyframes logo-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-9px); }
+}
+
+@keyframes logo-impact {
+  0% { transform: scale(1) rotate(0); }
+  35% { transform: scale(1.09) rotate(-2deg); }
+  65% { transform: scale(.97) rotate(1deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes logo-ring {
+  0% { opacity: .8; transform: scale(.72); }
+  100% { opacity: 0; transform: scale(1.18); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-mark img {
+  .brand-mark img, .brand-mark.logo-tapped::after {
     animation: none;
   }
 }
@@ -107,6 +159,11 @@ input, select {
 }
 input:focus, select:focus { border-color: #f2f2f2; box-shadow: 0 0 0 3px rgba(255,255,255,.08); }
 small { color: #ff8a8a; }
+.privacy-box { padding: 14px 16px; border: 1px solid #333338; border-radius: 14px; background: #151517; }
+.privacy-box p { margin: 0 0 12px; color: #aaaab2; font-size: 13px; line-height: 1.5; }
+.consent-row { display: flex; grid-template-columns: none; align-items: flex-start; gap: 10px; cursor: pointer; }
+.consent-row input { width: 18px; height: 18px; margin: 1px 0 0; padding: 0; flex: 0 0 auto; accent-color: #f2f2f2; }
+.consent-row span { font-size: 13px; line-height: 1.45; }
 button {
   margin-top: 8px; padding: 1.15em 1.5em; min-height: 56px; border: 0; border-radius: 14px;
   background: #f2f2f2; color: #111; font-weight: 900; letter-spacing: .06em;

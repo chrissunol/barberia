@@ -6,16 +6,17 @@
   <section class="checkin-card">
     <label class="language-picker">
       <span>{{ text.language }}</span>
-      <select [(ngModel)]="language" [attr.aria-label]="text.language">
+      <select [ngModel]="language" (ngModelChange)="setLanguage($event)" [attr.aria-label]="text.language">
         <option value="es">Español</option>
         <option value="en">English</option>
       </select>
     </label>
 
     <div class="brand-panel">
-      <div class="brand-mark">
+      <button class="brand-mark" type="button" (click)="onLogoTap()" [class.logo-tapped]="logoTapped"
+        [attr.aria-label]="text.logoAction">
         <img src="assets/alibaba-barber.png" alt="Alibaba Barber" loading="eager">
-      </div>
+      </button>
       <div class="intro">
         <p class="eyebrow">{{ text.barberShop }}</p>
         <h1>{{ text.welcome }}</h1>
@@ -71,12 +72,23 @@
           </select>
         </label>
 
+        <div class="privacy-box">
+          <p>{{ text.privacyNotice }}</p>
+          <label class="consent-row">
+            <input type="checkbox" formControlName="privacyConsent">
+            <span>{{ text.privacyConsent }}</span>
+          </label>
+          @if (form.controls.privacyConsent.touched && form.controls.privacyConsent.invalid) {
+            <small>{{ text.privacyError }}</small>
+          }
+        </div>
+
         <button type="submit" [disabled]="loading">
           {{ loading ? text.checkingIn : text.checkIn }}
         </button>
 
         @if (errorMessage) {
-          <div class="message error">{{ errorMessage }}</div>
+          <div class="message error" role="alert">{{ errorMessage }}</div>
         }
       </form>
     </div>
