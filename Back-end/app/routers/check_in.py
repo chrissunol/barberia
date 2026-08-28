@@ -1,15 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from slowapi import Limiter
 from supabase import Client
 from app.core.config import settings
-from app.core.network import get_client_ip, require_allowed_network
+from app.core.network import require_allowed_network
+from app.core.rate_limit import limiter
 from app.schemas.check_in import CheckInCreate, CheckInResponse
 from app.services.supabase_service import get_supabase
 
 router = APIRouter(prefix="/api/check-in", tags=["check-in"])
-limiter = Limiter(key_func=get_client_ip, storage_uri=settings.rate_limit_storage_uri)
-
-
 @router.post("", response_model=CheckInResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit(settings.rate_limit)
 def create_check_in(

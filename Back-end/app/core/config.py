@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 class Settings(BaseSettings):
@@ -9,6 +10,12 @@ class Settings(BaseSettings):
     trusted_proxy_cidrs: str = ""
     rate_limit: str = "5/minute"
     rate_limit_storage_uri: str = "memory://"
+    admin_login_rate_limit: str = "5/minute"
+    admin_email: str = "admin@barberia.com"
+    admin_password: str = "change-me"
+    admin_token_secret: str = "change-this-secret"
+    admin_token_ttl_seconds: int = 28800
+    business_timezone: str = "America/Chicago"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -23,6 +30,23 @@ class Settings(BaseSettings):
     @property
     def frontend_origin_list(self) -> list[str]:
         return [origin.strip().rstrip("/") for origin in self.frontend_origin.split(",") if origin.strip()]
+
+    @property
+    def admin_credentials_configured(self) -> bool:
+        return (
+            self.admin_email.strip().lower() != "admin@barberia.com"
+            and not self.admin_password.startswith("change-")
+            and len(self.admin_password) >= 12
+            and not self.admin_token_secret.startswith("change-")
+            and len(self.admin_token_secret) >= 32
+        )
+
+    @property
+    def business_zone(self) -> ZoneInfo:
+        try:
+            return ZoneInfo(self.business_timezone)
+        except ZoneInfoNotFoundError as exc:
+            raise ValueError(f"Unknown business timezone: {self.business_timezone}") from exc
 
 
 settings = Settings()
