@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -54,7 +55,13 @@ export class AdminLoginComponent {
     const { email, password } = this.form.getRawValue();
     this.auth.login(email, password).subscribe({
       next: () => this.router.navigate(['/admin']),
-      error: () => { this.error = 'Las credenciales no son válidas.'; this.loading = false; }
+      error: (response: HttpErrorResponse) => {
+        if (response.status === 503) this.error = 'El acceso administrativo no está configurado en el servidor.';
+        else if (response.status === 429) this.error = 'Demasiados intentos. Espera un minuto y vuelve a intentarlo.';
+        else if (response.status === 0) this.error = 'No se pudo conectar con el servidor.';
+        else this.error = 'Las credenciales no son válidas.';
+        this.loading = false;
+      }
     });
   }
 }

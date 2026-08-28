@@ -11,9 +11,9 @@ class Settings(BaseSettings):
     rate_limit: str = "5/minute"
     rate_limit_storage_uri: str = "memory://"
     admin_login_rate_limit: str = "5/minute"
-    admin_email: str = "admin@barberia.com"
-    admin_password: str = "change-me"
-    admin_token_secret: str = "change-this-secret"
+    admin_email: str = ""
+    admin_password: str = ""
+    admin_token_secret: str = ""
     admin_token_ttl_seconds: int = 28800
     business_timezone: str = "America/Chicago"
 
@@ -34,7 +34,8 @@ class Settings(BaseSettings):
     @property
     def admin_credentials_configured(self) -> bool:
         return (
-            self.admin_email.strip().lower() != "admin@barberia.com"
+            bool(self.admin_email.strip())
+            and "@" in self.admin_email
             and not self.admin_password.startswith("change-")
             and len(self.admin_password) >= 12
             and not self.admin_token_secret.startswith("change-")
