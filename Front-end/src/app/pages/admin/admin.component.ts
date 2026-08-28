@@ -21,7 +21,14 @@ export class AdminComponent implements OnInit {
   search = ''; sort = 'visits'; direction = 'desc'; page = 1; total = 0; readonly pageSize = 8;
   dashboardLoading = true; customersLoading = true; detailLoading = false;
   dashboardError = ''; customersError = ''; detailError = '';
+  activeSection: 'summary' | 'customers' = 'summary';
   private modalTrigger?: HTMLElement;
+  showSection(section: 'summary' | 'customers'): void {
+    this.activeSection = section;
+    if (section === 'customers' && !this.customersLoading && !this.customers.length && !this.customersError) {
+      this.loadCustomers();
+    }
+  }
   ngOnInit(): void { this.loadDashboard(); this.loadCustomers(); }
   loadDashboard(): void {
     this.dashboardLoading = true; this.dashboardError = '';

@@ -1,11 +1,14 @@
 <div class="app-shell">
-  <aside class="sidebar"><div class="brand">BARBERIA <span>ADMIN</span></div><nav aria-label="Secciones del panel"><a href="#resumen">Resumen</a><a href="#clientes">Clientes</a></nav><button class="logout" (click)="logout()">Cerrar sesión</button></aside>
-  <main class="content" id="resumen">
-    <header><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Resumen general</h1></div><div class="avatar" aria-hidden="true">AD</div></header>
+  <aside class="sidebar"><div class="brand">BARBERIA <span>ADMIN</span></div><nav aria-label="Secciones del panel"><button type="button" [class.active]="activeSection === 'summary'" [attr.aria-current]="activeSection === 'summary' ? 'page' : null" (click)="showSection('summary')">Resumen</button><button type="button" [class.active]="activeSection === 'customers'" [attr.aria-current]="activeSection === 'customers' ? 'page' : null" (click)="showSection('customers')">Clientes</button></nav><button class="logout" (click)="logout()">Cerrar sesión</button></aside>
+  <main class="content">
+    <header><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>{{ activeSection === 'summary' ? 'Resumen general' : 'Directorio de clientes' }}</h1></div><div class="avatar" aria-hidden="true">AD</div></header>
     @if (detailLoading) { <p class="inline-status" role="status">Abriendo perfil...</p> }
     @if (detailError) { <p class="inline-error" role="alert">{{ detailError }}</p> }
-    <app-dashboard-overview [data]="dashboard" [loading]="dashboardLoading" [error]="dashboardError" (retry)="loadDashboard()" (selectCustomer)="openCustomer($event.customer, $event.event)" />
-    <app-customer-directory [customers]="customers" [loading]="customersLoading" [error]="customersError" [total]="total" [page]="page" [pageSize]="pageSize" [search]="search" (searchChange)="search = $event" (applySearch)="applySearch()" (retry)="loadCustomers()" (sort)="changeSort($event)" (previous)="previousPage()" (next)="nextPage()" (selectCustomer)="openCustomer($event.customer, $event.event)" />
+    @if (activeSection === 'summary') {
+      <app-dashboard-overview [data]="dashboard" [loading]="dashboardLoading" [error]="dashboardError" (retry)="loadDashboard()" (selectCustomer)="openCustomer($event.customer, $event.event)" />
+    } @else {
+      <app-customer-directory [customers]="customers" [loading]="customersLoading" [error]="customersError" [total]="total" [page]="page" [pageSize]="pageSize" [search]="search" (searchChange)="search = $event" (applySearch)="applySearch()" (retry)="loadCustomers()" (sort)="changeSort($event)" (previous)="previousPage()" (next)="nextPage()" (selectCustomer)="openCustomer($event.customer, $event.event)" />
+    }
   </main>
   @if (selected; as customer) { <app-customer-profile [customer]="customer" (close)="closeCustomer()" /> }
 </div>

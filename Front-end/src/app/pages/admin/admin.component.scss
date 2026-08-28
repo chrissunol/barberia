@@ -28,6 +28,8 @@ app-admin, .app-shell { background:#f6f8fc; color:#172033; }
 .brand span,.eyebrow,.section-label,.history-row b { color:#6366f1; }
 nav a { color:#aebbd0; border-radius:9px; border-left:0; }
 nav a:hover,nav a:focus-visible { background:#ffffff12; color:#fff; box-shadow:inset 3px 0 #818cf8; }
+nav > button { width:100%; padding:13px 14px; border:0; border-radius:9px; background:transparent; color:#aebbd0; font:13px Arial,sans-serif; text-align:left; }
+nav > button:hover,nav > button:focus-visible,nav > button.active { background:#ffffff12; color:#fff; box-shadow:inset 3px 0 #818cf8; outline:none; }
 .metrics article,.chart-card,.ranking,.customers-section,.state-card { border:1px solid #e6eaf2; border-radius:16px; box-shadow:0 10px 30px rgba(30,41,59,.055); }
 .metrics article { border-top:3px solid #6366f1; }
 .metrics span,.metrics small,.trend-tag,.mini-count,footer,.empty-block,.empty-state { color:#64748b; }
@@ -48,7 +50,7 @@ tbody tr:focus-visible { outline-color:#6366f1; }
   .app-shell { display:block; }
   .sidebar { position:sticky; top:0; z-index:25; width:100%; min-height:auto; padding:12px 14px; flex-direction:row; align-items:center; gap:10px; }
   .brand { writing-mode:initial; font-size:11px; } .brand span { display:none; }
-  nav { display:flex; margin:0 auto; gap:2px; } nav a { height:auto; padding:9px; font-size:11px; }
+  nav { display:flex; margin:0 auto; gap:2px; } nav a,nav > button { width:auto; height:auto; padding:9px; font-size:11px; text-align:center; }
   .logout { margin:0; padding:8px; font-size:0; } .logout::after { content:'Salir'; font-size:11px; }
   .content { padding:24px 14px; } h1 { font-size:32px; }
   .metrics { grid-template-columns:1fr; }
