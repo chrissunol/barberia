@@ -84,7 +84,10 @@ export class AuthService {
 
   private expirationTime(token: string): number | null {
     try {
-      const [payload] = token.split('.', 1);
+      const parts = token.split('.');
+      // The API signs tokens as "payload.signature". Also accept standard
+      // three-part JWTs so the client remains compatible if that changes.
+      const payload = parts.length === 2 ? parts[0] : parts.length === 3 ? parts[1] : undefined;
       if (!payload) return null;
       const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
       const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');

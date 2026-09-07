@@ -25,6 +25,9 @@ def get_client_ip(request: Request) -> str:
 
 
 def require_allowed_network(request: Request) -> None:
+    if not settings.enforce_client_ip_allowlist:
+        return
+
     allowed_ips = settings.allowed_client_ip_list
     if not allowed_ips:
         raise HTTPException(

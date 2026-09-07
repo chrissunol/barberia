@@ -1,7 +1,15 @@
 <div class="app-shell">
-  <aside class="sidebar"><div class="brand">BARBERIA <span>ADMIN</span></div><nav aria-label="Secciones del panel"><button type="button" [class.active]="activeSection === 'summary'" [attr.aria-current]="activeSection === 'summary' ? 'page' : null" (click)="showSection('summary')">Resumen</button><button type="button" [class.active]="activeSection === 'customers'" [attr.aria-current]="activeSection === 'customers' ? 'page' : null" (click)="showSection('customers')">Clientes</button></nav><button class="logout" (click)="logout()">Cerrar sesión</button></aside>
+  <aside class="sidebar">
+    <div class="brand-block"><img src="assets/alibaba-barber.png" alt="Alibaba Barber"><div><strong>ALIBABA</strong><span>BARBER</span></div></div>
+    <nav aria-label="Secciones del panel">
+      <button type="button" [class.active]="activeSection === 'summary'" [attr.aria-current]="activeSection === 'summary' ? 'page' : null" (click)="showSection('summary')"><span class="nav-icon">▦</span><span>Dashboard</span></button>
+      <button type="button" [class.active]="activeSection === 'customers'" [attr.aria-current]="activeSection === 'customers' ? 'page' : null" (click)="showSection('customers')"><span class="nav-icon">♟</span><span>Clientes</span></button>
+    </nav>
+    <div class="sidebar-note"><span>GESTIÓN</span><strong>Tu barbería,<br>en una mirada.</strong><small>Información actualizada desde tu sistema.</small></div>
+    <button class="logout" (click)="logout()"><span>↪</span> Cerrar sesión</button>
+  </aside>
   <main class="content">
-    <header><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>{{ activeSection === 'summary' ? 'Resumen general' : 'Directorio de clientes' }}</h1></div><div class="avatar" aria-hidden="true">AD</div></header>
+    <header class="topbar"><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>{{ activeSection === 'summary' ? 'Dashboard' : 'Clientes' }}</h1><p class="welcome">Bienvenido de vuelta, <b>Admin</b></p></div><div class="admin-chip"><span class="avatar" aria-hidden="true">AD</span><span><b>Admin</b><small>Alibaba Barber</small></span></div></header>
     @if (detailLoading) { <p class="inline-status" role="status">Abriendo perfil...</p> }
     @if (detailError) { <p class="inline-error" role="alert">{{ detailError }}</p> }
     @if (activeSection === 'summary') {

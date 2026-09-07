@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     supabase_url: str
     supabase_key: str
     frontend_origin: str = "http://localhost:4200"
+    enforce_client_ip_allowlist: bool = True
     allowed_client_ips: str = ""
     trusted_proxy_cidrs: str = ""
     rate_limit: str = "5/minute"
