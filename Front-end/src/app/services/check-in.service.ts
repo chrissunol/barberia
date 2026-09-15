@@ -8,7 +8,9 @@ export interface CheckInPayload {
   last_name: string;
   email: string;
   phone: string;
-  how_heard: string;
+  is_new_customer: boolean;
+  has_appointment: boolean;
+  how_heard: string | null;
 }
 
 export interface CheckInResponse {

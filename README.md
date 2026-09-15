@@ -7,6 +7,8 @@ MVP para check-in de clientes en una barbería usando Angular + FastAPI + Supaba
 - Apellidos
 - Correo
 - Teléfono
+- Si es cliente nuevo o recurrente
+- Si viene con cita o sin cita
 - Cómo se enteró de la barbería
 - Validación en Angular y FastAPI
 - Búsqueda de cliente por teléfono

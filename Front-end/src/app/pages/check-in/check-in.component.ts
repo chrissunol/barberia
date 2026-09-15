@@ -23,7 +23,11 @@ export class CheckInComponent implements OnDestroy {
   readonly translations = {
     es: {
       language: 'Idioma', barberShop: 'BARBERIA', welcome: 'Bienvenido',
-      subtitle: 'Regístrate por favor. Solo tomará unos segundos.', logoAction: 'Activar animación del logo', firstName: 'Nombre',
+      subtitle: 'Regístrate por favor. Solo tomará unos segundos.', logoAction: 'Activar animación del logo',
+      customerQuestion: '¿Es tu primera visita?', selectOption: 'Selecciona una opción',
+      newCustomer: 'Sí, soy cliente nuevo', returningCustomer: 'No, ya he venido antes',
+      appointmentQuestion: '¿Vienes con cita?', yesAppointment: 'Sí, tengo cita', noAppointment: 'No, vengo sin cita',
+      firstName: 'Nombre',
       lastName: 'Apellido', phone: 'Número de teléfono', email: 'Correo electrónico',
       howHeard: '¿Cómo te enteraste de nosotros?', howHeardPlaceholder: 'Selecciona una opción',
       heardOptions: [
@@ -42,7 +46,11 @@ export class CheckInComponent implements OnDestroy {
     },
     en: {
       language: 'Language', barberShop: 'BARBER SHOP', welcome: 'Welcome',
-      subtitle: 'Please register. It will only take a few seconds.', logoAction: 'Activate logo animation', firstName: 'First name',
+      subtitle: 'Please register. It will only take a few seconds.', logoAction: 'Activate logo animation',
+      customerQuestion: 'Is this your first visit?', selectOption: 'Select an option',
+      newCustomer: 'Yes, I am a new customer', returningCustomer: 'No, I have visited before',
+      appointmentQuestion: 'Do you have an appointment?', yesAppointment: 'Yes, I have an appointment', noAppointment: 'No, I am a walk-in',
+      firstName: 'First name',
       lastName: 'Last name', phone: 'Phone number', email: 'Email',
       howHeard: 'How did you hear about us?', howHeardPlaceholder: 'Select an option',
       heardOptions: [
@@ -68,6 +76,17 @@ export class CheckInComponent implements OnDestroy {
   setLanguage(language: 'es' | 'en'): void {
     this.language = language;
     document.documentElement.lang = language;
+  }
+
+  private updateHowHeardValidation(type: string): void {
+    const howHeard = this.form.controls.howHeard;
+    if (type === 'new') {
+      howHeard.setValidators(Validators.required);
+    } else {
+      howHeard.clearValidators();
+      howHeard.setValue('');
+    }
+    howHeard.updateValueAndValidity();
   }
 
   formatPhone(event: Event): void {
@@ -102,18 +121,22 @@ export class CheckInComponent implements OnDestroy {
   }
 
   readonly form = this.fb.nonNullable.group({
+    customerType: ['', Validators.required],
+    hasAppointment: ['', Validators.required],
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]],
-    howHeard: ['', Validators.required],
+    howHeard: [''],
     privacyConsent: [false, Validators.requiredTrue]
   });
 
   constructor(
     private fb: FormBuilder,
     private checkInService: CheckInService
-  ) {}
+  ) {
+    this.form.controls.customerType.valueChanges.subscribe(type => this.updateHowHeardValidation(type));
+  }
 
   submit(): void {
     if (this.successTimeout) {
@@ -136,7 +159,9 @@ export class CheckInComponent implements OnDestroy {
       last_name: value.lastName.trim(),
       email: value.email.trim(),
       phone: value.phone.trim(),
-      how_heard: value.howHeard
+      is_new_customer: value.customerType === 'new',
+      has_appointment: value.hasAppointment === 'yes',
+      how_heard: value.customerType === 'new' ? value.howHeard : null
     })
     .pipe(finalize(() => this.loading = false))
     .subscribe({

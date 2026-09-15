@@ -148,7 +148,7 @@
 h1 { margin: 0; font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1; }
 .subtitle { margin: 1em 0 2em; color: #aaaab2; line-height: 1.6; font-size: 1em; }
 form { display: grid; gap: 20px; }
-.name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.name-grid, .question-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 label { display: grid; gap: 8px; }
 label > span { font-size: 14px; font-weight: 700; }
 input, select {
@@ -187,7 +187,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .error { background: rgba(248, 113, 113, .12); color: #ffaaaa; }
 
 @media (max-width: 560px) {
-  .name-grid { grid-template-columns: 1fr; }
+  .name-grid, .question-grid { grid-template-columns: 1fr; }
   .checkin-page { padding: 20px 12px; }
   .checkin-card { border-radius: 22px; padding: 92px 22px 28px; }
   .language-picker { top: 20px; left: 22px; }

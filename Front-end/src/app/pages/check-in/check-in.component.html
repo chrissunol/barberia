@@ -25,8 +25,27 @@
     </div>
 
     <div class="form-panel">
-
       <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="question-grid">
+          <label>
+            <span>{{ text.customerQuestion }}</span>
+            <select formControlName="customerType">
+              <option value="" disabled>{{ text.selectOption }}</option>
+              <option value="new">{{ text.newCustomer }}</option>
+              <option value="returning">{{ text.returningCustomer }}</option>
+            </select>
+          </label>
+
+          <label>
+            <span>{{ text.appointmentQuestion }}</span>
+            <select formControlName="hasAppointment">
+              <option value="" disabled>{{ text.selectOption }}</option>
+              <option value="yes">{{ text.yesAppointment }}</option>
+              <option value="no">{{ text.noAppointment }}</option>
+            </select>
+          </label>
+        </div>
+
         <div class="name-grid">
           <label>
             <span>{{ text.firstName }}</span>
@@ -62,15 +81,17 @@
           }
         </label>
 
-        <label>
-          <span>{{ text.howHeard }}</span>
-          <select formControlName="howHeard">
-            <option value="" disabled>{{ text.howHeardPlaceholder }}</option>
-            @for (source of text.heardOptions; track source.value) {
-              <option [value]="source.value">{{ source.label }}</option>
-            }
-          </select>
-        </label>
+        @if (form.controls.customerType.value === 'new') {
+          <label>
+            <span>{{ text.howHeard }}</span>
+            <select formControlName="howHeard">
+              <option value="" disabled>{{ text.howHeardPlaceholder }}</option>
+              @for (source of text.heardOptions; track source.value) {
+                <option [value]="source.value">{{ source.label }}</option>
+              }
+            </select>
+          </label>
+        }
 
         <div class="privacy-box">
           <p>{{ text.privacyNotice }}</p>

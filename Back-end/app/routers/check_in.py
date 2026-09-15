@@ -35,7 +35,7 @@ def create_check_in(
                 updates["last_name"] = payload.last_name
             if customer.get("email") != str(payload.email):
                 updates["email"] = str(payload.email)
-            if customer.get("how_heard") != payload.how_heard:
+            if payload.is_new_customer and customer.get("how_heard") != payload.how_heard:
                 updates["how_heard"] = payload.how_heard
 
             if updates:
@@ -48,7 +48,7 @@ def create_check_in(
                     "last_name": payload.last_name,
                     "email": str(payload.email),
                     "phone": payload.phone,
-                    "how_heard": payload.how_heard,
+                    "how_heard": payload.how_heard or "unknown",
                 })
                 .execute()
             )
@@ -56,7 +56,11 @@ def create_check_in(
 
         check_in = (
             db.table("check_ins")
-            .insert({"customer_id": customer_id, "status": "waiting"})
+            .insert({
+                "customer_id": customer_id,
+                "status": "waiting",
+                "has_appointment": payload.has_appointment,
+            })
             .execute()
         )
 

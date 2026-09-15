@@ -98,15 +98,16 @@ def _customer_row(customer: dict, visits: list[dict]) -> dict:
 
 def _trend(visits: list[dict], start: datetime, period: str) -> list[dict]:
     buckets = Counter()
+    business_start = start.astimezone(settings.business_zone)
     for visit in visits:
         date = _date(visit.get("checked_in_at"))
         if not date:
             continue
-        comparable_start = start.astimezone(date.tzinfo) if date.tzinfo else start.replace(tzinfo=None)
-        if date < comparable_start:
+        business_date = date.astimezone(settings.business_zone)
+        if business_date < business_start:
             continue
-        if period == "day": key = date.strftime("%Y-%m-%d")
-        elif period == "week": key = (date - timedelta(days=date.weekday())).strftime("%Y-%m-%d")
-        else: key = date.strftime("%Y-%m")
+        if period == "day": key = business_date.strftime("%Y-%m-%d")
+        elif period == "week": key = (business_date - timedelta(days=business_date.weekday())).strftime("%Y-%m-%d")
+        else: key = business_date.strftime("%Y-%m")
         buckets[key] += 1
     return [{"label": key, "value": buckets[key]} for key in sorted(buckets)]

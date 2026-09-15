@@ -4,4 +4,5 @@ Back-end/**/__pycache__/
 Front-end/node_modules/
 Front-end/dist/
 Front-end/.angular/
+Front-end/.vscode/
 *.pyc

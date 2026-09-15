@@ -20,14 +20,14 @@ from app.routers.admin import _customer_row, _date, _trend
 class AdminBackendTests(unittest.TestCase):
     def setUp(self):
         limiter.reset()
-        self.original = (settings.admin_email, settings.admin_password, settings.admin_token_secret, settings.admin_token_ttl_seconds)
+        self.original = (settings.admin_email, settings.admin_password, settings.admin_token_secret, settings.admin_token_ttl_seconds, settings.business_timezone)
         settings.admin_email = "owner@example.com"
         settings.admin_password = "a-secure-test-password"
         settings.admin_token_secret = "test-secret-that-is-longer-than-32-characters"
         settings.admin_token_ttl_seconds = 3600
 
     def tearDown(self):
-        settings.admin_email, settings.admin_password, settings.admin_token_secret, settings.admin_token_ttl_seconds = self.original
+        settings.admin_email, settings.admin_password, settings.admin_token_secret, settings.admin_token_ttl_seconds, settings.business_timezone = self.original
 
     def test_token_round_trip(self):
         token = create_admin_token()
@@ -75,6 +75,18 @@ class AdminBackendTests(unittest.TestCase):
         ]
         points = _trend(visits, now - timedelta(days=2), "day")
         self.assertEqual(sum(point["value"] for point in points), 1)
+
+    def test_trend_groups_utc_visits_in_the_business_timezone(self):
+        settings.business_timezone = "America/Chicago"
+        visit_time = datetime(2026, 1, 2, 1, 30, tzinfo=timezone.utc)
+
+        points = _trend(
+            [{"checked_in_at": visit_time.isoformat()}],
+            datetime(2026, 1, 1, tzinfo=timezone.utc),
+            "day",
+        )
+
+        self.assertEqual(points, [{"label": "2026-01-01", "value": 1}])
 
     def test_customer_row_ignores_invalid_visit_dates(self):
         customer = {"id": "1", "first_name": "Ada", "last_name": "Lovelace", "phone": "123", "created_at": None}
